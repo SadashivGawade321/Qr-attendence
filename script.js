@@ -7,8 +7,17 @@ window.onload = function() {
   setupQRScanner();
 };
 
-// Function to add attendance manually
+
+
+// Function to add attendance manually (with password protection)
 function markAttendance() {
+  const password = prompt('Enter the admin password to mark attendance:');
+  
+  if (password !== '1234') {
+    alert('Incorrect password! Only the teacher can mark attendance.');
+    return;
+  }
+
   const studentName = document.getElementById('studentName').value.trim();
 
   if (studentName === '') {
@@ -19,6 +28,8 @@ function markAttendance() {
   addAttendanceRecord(studentName);
   document.getElementById('studentName').value = '';
 }
+
+
 
 // Function to add attendance record
 function addAttendanceRecord(studentName) {
@@ -34,6 +45,8 @@ function addAttendanceRecord(studentName) {
   localStorage.setItem('attendanceData', JSON.stringify(attendanceData));
   displayAttendance();
 }
+
+
 
 // Function to display attendance records
 function displayAttendance() {
@@ -60,6 +73,9 @@ function displayAttendance() {
   });
 }
 
+
+
+
 // Function to clear all attendance records
 function clearAttendance() {
   if (confirm('Are you sure you want to clear all attendance records?')) {
@@ -68,6 +84,9 @@ function clearAttendance() {
     displayAttendance();
   }
 }
+
+
+
 
 // Function to export attendance data to Excel
 function exportToExcel() {
@@ -87,6 +106,9 @@ function exportToExcel() {
   XLSX.writeFile(workbook, "Attendance_Record.xlsx");
 }
 
+
+
+
 // QR Scanner setup
 function setupQRScanner() {
   const scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
@@ -99,7 +121,7 @@ function setupQRScanner() {
 
   // Start the scanner and choose the rear camera if available
   Instascan.Camera.getCameras().then(function(cameras) {
-    if (cameras.length > 0) {
+    if (cameras.length > 0.5) {
       scanner.start(cameras[0]);
     } else {
       alert('No cameras found.');
